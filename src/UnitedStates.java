@@ -41,7 +41,7 @@ public class UnitedStates {
 		});
 	}
 	public void populateStatesMetadata() {
-		File file = new File("states.json");
+		File file = new File("src/states.json");
 		 
 		  BufferedReader br;
 		try {

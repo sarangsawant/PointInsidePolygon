@@ -30,7 +30,7 @@ public class HTTPServer {
 						line = reader.readLine();
 					}
 
-					List<double[]> list = new ArrayList<>();
+					/*List<double[]> list = new ArrayList<>();
 					
 					double[] input = {-77.036133,40.513799};
 					list.add(input);
@@ -43,11 +43,17 @@ public class HTTPServer {
 					
 					double[] input3 = {0.0,0.0};
 					list.add(input3);
+					*/
+
+					//for(double[] arr : list)
+					double[] inputCoordinates = new double[2];
+					inputCoordinates[0] = -77.036133;
+					inputCoordinates[0] = 40.513799;
+
+					String[] result = new String[1];
+					result[0] = states.findStateForPoint(inputCoordinates);
 					
-					for(double[] arr : list)
-						System.out.println(states.findStateForPoint(arr));
-					
-					String httpResponse = "HTTP/1.1 200 OK\r\n\r\n" + "Hi..";
+					String httpResponse = "HTTP/1.1 200 OK\r\n\r\n" + result.toString();
 
 					socket.getOutputStream().write(httpResponse.getBytes("UTF-8"));
 					}
