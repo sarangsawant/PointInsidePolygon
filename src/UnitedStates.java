@@ -59,6 +59,7 @@ public class UnitedStates {
 			e.printStackTrace();
 		}
 		//print();
+		
 	}		
 	
 	public String findStateForPoint(double[] pointToFind) {
