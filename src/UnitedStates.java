@@ -90,7 +90,7 @@ public class UnitedStates {
 			
 			if(count%2 == 1) {
 				result = state.getKey();
-				System.out.println("Intersection count " + count);
+				//System.out.println("Intersection count " + count);
 				return result;
 			}
 		}

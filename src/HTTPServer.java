@@ -11,10 +11,12 @@ public class HTTPServer {
 	
 	public static void main(String[] args) {
 		final ServerSocket server;
-		
 		try {
 			server = new ServerSocket(8080);
-			System.out.println("Listeneing on 8080");
+			System.out.println("Listening on port 8080");
+			
+			double longitude = 0;
+			double latitude = 0;
 			
 			UnitedStates states = new UnitedStates();
 			states.populateStatesMetadata();
@@ -25,35 +27,27 @@ public class HTTPServer {
 					InputStreamReader isr = new InputStreamReader(socket.getInputStream());
 					BufferedReader reader = new BufferedReader(isr); 
 					String line = reader.readLine(); 
+					
 					while (!line.isEmpty()) {
-						System.out.println(line);
 						line = reader.readLine();
+						
+						if(line.contains("longitude"))
+							longitude = Double.parseDouble(line.split(":")[1].trim());
+						
+						if(line.contains("latitude"))
+							latitude = Double.parseDouble(line.split(":")[1].trim());
+						
 					}
 
-					/*List<double[]> list = new ArrayList<>();
 					
-					double[] input = {-77.036133,40.513799};
-					list.add(input);
-					
-					double[] input1 = {-121.66522, 38.169285};
-					list.add(input1);
-					
-					double[] input2 = {-100.051535, 38.998918};
-					list.add(input2);
-					
-					double[] input3 = {0.0,0.0};
-					list.add(input3);
-					*/
-
-					//for(double[] arr : list)
 					double[] inputCoordinates = new double[2];
-					inputCoordinates[0] = -77.036133;
-					inputCoordinates[0] = 40.513799;
+					inputCoordinates[0] = longitude;
+					inputCoordinates[1] = latitude;
+					System.out.println(inputCoordinates[0] + " -- " + inputCoordinates[1]);
 
-					String[] result = new String[1];
-					result[0] = states.findStateForPoint(inputCoordinates);
+					String result = states.findStateForPoint(inputCoordinates);
 					
-					String httpResponse = "HTTP/1.1 200 OK\r\n\r\n" + result.toString();
+					String httpResponse = "HTTP/1.1 200 OK\r\n\r\n" + result;
 
 					socket.getOutputStream().write(httpResponse.getBytes("UTF-8"));
 					}
