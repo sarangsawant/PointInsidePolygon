@@ -104,8 +104,7 @@ public class UnitedStates {
 
 			// if number of intersections are odd, point belongs to that state
 			if (count % 2 == 1) {
-				results.add(state.getKey());
-				System.out.println("count " + count);
+				results.add(state.getKey());				
 			}
 		}
 

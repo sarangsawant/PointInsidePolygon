@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Set;
+import java.util.HashSet;
 
 public class HTTPServer {
 
@@ -46,10 +47,12 @@ public class HTTPServer {
 						inputCoordinates[1] = latitude;
 
 						results = states.findStateForPoint(inputCoordinates);
-					} else
-						results.add(new String("Please Enter Longitude and Latitude of the point!!!"));
+					} else{
+						results = new HashSet<String>();
+						results.add(new String("Please Enter Longitude and Latitude of the point!!!"));	
+					}
 
-					String httpResponse = "HTTP/1.1 200 OK\r\n\r\n" + results.toString();
+					String httpResponse = "HTTP/1.1 200 OK\r\n\r\n" + results.toString() + "\n";
 					socket.getOutputStream().write(httpResponse.getBytes("UTF-8"));
 				}
 
