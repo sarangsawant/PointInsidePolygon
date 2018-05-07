@@ -6,8 +6,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class UnitedStates {
 
@@ -40,15 +42,6 @@ public class UnitedStates {
 		stateCoordinatesMap.put(stateName, coordinates);
 	}
 
-	private void print() {
-		stateCoordinatesMap.forEach((k, v) -> {
-			System.out.println("state ->" + k);
-			for (double[] d : v) {
-				System.out.println(d[0] + " " + d[1]);
-			}
-		});
-	}
-
 	/**
 	 * This function reads states.json file and populates stateCoordinatesMap
 	 */
@@ -70,20 +63,25 @@ public class UnitedStates {
 			System.err.println("Error in reading file!!");
 			e.printStackTrace();
 		}
-		// print();
 
 	}
 
 	/**
-	 * This function iterates over all states to find if point belongs to that state
-	 * @param pointToFind (pointToFind[0] -> longitude and pointToFind[1]->latitude)
+	 * This function iterates over all states to find if point belongs to that
+	 * state
+	 * 
+	 * @param pointToFind
+	 *            (pointToFind[0] -> longitude and pointToFind[1]->latitude)
 	 * @return
 	 */
-	public String findStateForPoint(double[] pointToFind) {
-		String result = "The point {" +pointToFind[0] + ","+ pointToFind[1] + "}does NOT belong to any US state";
+	public Set<String> findStateForPoint(double[] pointToFind) {
+		String errorStr = "The point {" + pointToFind[0] + "," + pointToFind[1] + "} does NOT belong to any US state";
 
-		if (pointToFind[0] > 0 || pointToFind[1] < 0)
-			return result;
+		Set<String> results = new HashSet<String>();
+		if (pointToFind[0] > 0 || pointToFind[1] < 0) {
+			results.add(errorStr);
+			return results;
+		}
 
 		for (Map.Entry<String, List<double[]>> state : stateCoordinatesMap.entrySet()) {
 			List<double[]> coordinates = state.getValue();
@@ -97,25 +95,29 @@ public class UnitedStates {
 					if (checkForOrientation(coordinates.get(i), pointToFind, coordinates.get(i + 1)) == 0) {
 
 						if (checkForPointsOnSegment(coordinates.get(i), pointToFind, coordinates.get(i + 1)))
-							return state.getKey();
+							results.add(state.getKey());
 					}
 
 					count++;
 				}
 			}
 
-			//if number of intersections are odd, point belongs to that state
+			// if number of intersections are odd, point belongs to that state
 			if (count % 2 == 1) {
-				result = state.getKey();
-				return result;
+				results.add(state.getKey());
+				System.out.println("count " + count);
 			}
 		}
-		
-		return result;
+
+		if (results.size() == 0)
+			results.add(errorStr);
+
+		return results;
 	}
 
 	/**
 	 * This function check if line segment p1-q1 intersect with segment p2-q2
+	 * 
 	 * @param p1
 	 * @param q1
 	 * @param p2
@@ -151,7 +153,8 @@ public class UnitedStates {
 	}
 
 	/**
-	 * This function checks for orientation of 3 points by finding slope of each line segment
+	 * This function checks for orientation of 3 points by finding slope of each
+	 * line segment
 	 * 
 	 * @param p
 	 * @param q
