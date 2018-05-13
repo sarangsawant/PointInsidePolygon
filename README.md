@@ -1,3 +1,5 @@
+Finding a state/states of USA, given a point(latitude and longitude)  
+
 Steps to run:
 
 1. Unzip state-server.tar.gz file and navigate inside "state-server" folder 
